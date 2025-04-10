@@ -1,0 +1,79 @@
+{
+  "version": "0.0.1",
+  "keywords": [],
+  "type": "commonjs",
+  "exports": {
+    "./package.json": "./package.json",
+    "./strapi-admin": {
+      "types": "./dist/admin/src/index.d.ts",
+      "source": "./admin/src/index.ts",
+      "import": "./dist/admin/index.mjs",
+      "require": "./dist/admin/index.js",
+      "default": "./dist/admin/index.js"
+    },
+    "./strapi-server": {
+      "types": "./dist/server/src/index.d.ts",
+      "source": "./server/src/index.ts",
+      "import": "./dist/server/index.mjs",
+      "require": "./dist/server/index.js",
+      "default": "./dist/server/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "strapi-plugin build",
+    "prepublishOnly": "npm run build",
+    "watch": "strapi-plugin watch",
+    "watch:link": "strapi-plugin watch:link",
+    "verify": "strapi-plugin verify",
+    "test:ts:front": "run -T tsc -p admin/tsconfig.json",
+    "test:ts:back": "run -T tsc -p server/tsconfig.json"
+  },
+  "dependencies": {
+    "@strapi/design-system": "^2.0.0-rc.21",
+    "@strapi/icons": "^2.0.0-rc.21",
+    "react-intl": "^7.1.10"
+  },
+  "devDependencies": {
+    "@strapi/strapi": "^5.12.4",
+    "@strapi/sdk-plugin": "^5.3.2",
+    "prettier": "^3.5.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.30.0",
+    "styled-components": "^6.1.17",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.2",
+    "@strapi/typescript-utils": "^5.12.4",
+    "typescript": "^5.8.3"
+  },
+  "peerDependencies": {
+    "@strapi/strapi": "^5.12.4",
+    "@strapi/sdk-plugin": "^5.3.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.30.0",
+    "styled-components": "^6.1.17"
+  },
+  "strapi": {
+    "kind": "plugin",
+    "name": "string-array-field",
+    "displayName": "String Array Field",
+    "description": "Custom field to add an array of strings in JSON format"
+  },
+  "main": "dist/server/index.js",
+  "name": "string-array-field",
+  "description": "Custom field to add an array of strings in JSON format",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com//OssprO.git"
+  },
+  "bugs": {
+    "url": "https://github.com//OssprO/issues"
+  },
+  "homepage": "https://github.com//OssprO#readme",
+  "author": "Osiel Hernandez <ossprodiseno@gmail.com>"
+}
