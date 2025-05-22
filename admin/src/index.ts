@@ -1,26 +1,20 @@
-import { getTranslation } from './utils/getTranslation';
-import { PLUGIN_ID } from './pluginId';
 import { PluginIcon } from './components/PluginIcon';
-
-interface StrapiApp {
-  customFields: {
-    register: (field: any) => void;
-  };
-}
+import { PLUGIN_ID } from './pluginId';
+import { getTrad } from './utils/getTranslation';
 
 export default {
   register(app: any) {
     app.customFields.register({
-      name: 'string-array',
+      name: PLUGIN_ID,
       pluginId: PLUGIN_ID,
       type: 'json',
       icon: PluginIcon,
       intlLabel: {
-        id: getTranslation(`${PLUGIN_ID}.label`),
+        id: getTrad(`${PLUGIN_ID}.label`),
         defaultMessage: 'String Array',
       },
       intlDescription: {
-        id: getTranslation(`${PLUGIN_ID}.description`),
+        id: getTrad(`${PLUGIN_ID}.description`),
         defaultMessage: 'Enter multiple string values',
       },
       components: {
@@ -41,11 +35,11 @@ export default {
                 name: 'required',
                 type: 'checkbox',
                 intlLabel: {
-                  id: getTranslation(`${PLUGIN_ID}.options.advanced.requiredField`),
+                  id: getTrad(`${PLUGIN_ID}.options.advanced.requiredField`),
                   defaultMessage: 'Required field',
                 },
                 description: {
-                  id: getTranslation(`${PLUGIN_ID}.options.advanced.requiredField.description`),
+                  id: getTrad(`${PLUGIN_ID}.options.advanced.requiredFieldDescription`),
                   defaultMessage: "You won't be able to create an entry if this field is empty",
                 },
               },
@@ -61,7 +55,6 @@ export default {
       locales.map(async (locale) => {
         try {
           const { default: data } = await import(`./translations/${locale}.json`);
-
           return { data, locale };
         } catch {
           return { data: {}, locale };

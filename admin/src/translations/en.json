@@ -1,1 +1,6 @@
-{}
+{
+  "string-array-field.label": "String Array Field",
+  "string-array-field.description": "Write multiple strings in array format",
+  "string-array-field.options.advanced.requiredField": "Required field",
+  "string-array-field.options.advanced.requiredFieldDescription": "You won't be able to create an entry if this field is empty"
+}

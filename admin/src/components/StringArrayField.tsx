@@ -3,113 +3,87 @@ import {
   Button,
   Field,
   Flex,
+  Box,
 } from '@strapi/design-system';
-import { Plus, Trash } from '@strapi/icons';import { IconButton } from '@strapi/design-system';
-import { Box } from '@strapi/design-system';
-;
+import { Trash } from '@strapi/icons';
+import { type InputProps, useField } from '@strapi/strapi/admin';
 
-interface StringArrayFieldProps {
-  name: string;
-  onChange: (e: { target: { name: string; value: string[] } }) => void;
-  value: string[] | null;
-  attribute: Record<string, any>;
-  label: string;
+type StringArrayFieldProps = InputProps & {
   labelAction?: React.ReactNode;
-  required?: boolean;
-  description?: {
-    id: string;
-    defaultMessage: string;
-  };
-  placeholder?: string;
-  disabled?: boolean;
-  hint?: string;
-  error?: string;
-}
+};
 
-export const StringArrayField = React.forwardRef<HTMLButtonElement, StringArrayFieldProps>(({
-  hint,
-  disabled = false,
-  labelAction,
-  label,
-  name,
-  required = false,
-  description,
-  onChange,
-  value,
-  error,
-  placeholder,
-  attribute,
-}, forwardedRef) => {
-  console.log('StringArrayField', name);
-  const currentValue = Array.isArray(value) ? value : [];
+export const StringArrayField = React.forwardRef<HTMLDivElement, StringArrayFieldProps>(
+  ({ hint, disabled, labelAction, label, name, required, ...props }, ref) => {
+    const field = useField(name);
+    let currentValue = Array.isArray(field.value) ? field.value : [];
+    const [fields, setFields] = React.useState<string[]>(currentValue);
+    const [newField, setNewField] = React.useState<string>('');
 
-  const handleAddItem = (): void => {
-    const newValue = [...currentValue, ''];
-    onChange({ target: { name, value: newValue } });
-  };
+    const addField = () => {
+      if (newField.trim() !== '') {
+        setFields([...fields, newField.trim()]);
+        setNewField('');
+      }
+    };
 
-  // Manejar el cambio de un elemento existente
-  const handleItemChange = (index: number, newValue: string): void => {
-    const updatedValues = [...currentValue];
-    updatedValues[index] = newValue;
-    onChange({ target: { name, value: updatedValues } });
-  };
+    const removeField = (index: number) => {
+      const updatedFields = fields.filter((_, i) => i !== index);
+      setFields(updatedFields);
+    };
 
-  const handleRemoveItem = (index: number): void => {
-    const newValue = [...currentValue];
-    newValue.splice(index, 1);
-    onChange({ target: { name, value: newValue } });
-  };
+    const handleFieldChange = (index: number, updatedValue: string) => {
+      const updatedFields = [...fields];
+      updatedFields[index] = updatedValue;
+      setFields(updatedFields);
+    };
 
-  return (
-      <Field.Root
-        name={name} 
-        id={name}
-        type="text"
-        label={label}
-        placeholder={placeholder}
-        description={hint}
-        error={error}
-        hint={description ? description.defaultMessage : undefined}
-        required={required}>
-        <Flex direction="column" gap={2} alignItems="stretch">
-          <Field.Label action={labelAction}>{label}</Field.Label>
-          <Flex direction="column" gap={2} alignItems="stretch">
-            {currentValue.map((item, index) => (
-              <Flex 
-                direction="row"
-                gap={2}
-                justifyContent="space-between"
-                key={`${name}-${index}`}>
-                <Box style={{ flexGrow: 1 }}>
-                  <Field.Input
-                    aria-label={`${name}-${index}`}
-                    name={`${name}-${index}`}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleItemChange(index, e.target.value)}
-                    value={item}
-                    fullWidth
-                  />
-                </Box>
-                <IconButton
-                  variant="danger-light"
-                  onClick={() => handleRemoveItem(index)}
-                  aria-label={`remove-${name}-${index}`}
-                  size="L">
-                  <Trash />
-                </IconButton>
-              </Flex>
-            ))}
-            <Button
-              startIcon={<Plus />}
-              variant="secondary"
-              onClick={handleAddItem}
-              disabled={disabled}>
-              Añadir String
+    React.useEffect(() => {
+      if (JSON.stringify(fields) !== JSON.stringify(currentValue)) {
+        field.onChange({ 
+          target: { 
+            value: fields,
+            name,
+          }
+        } as React.ChangeEvent<any>);
+      }
+    }, [fields, field, name]);
+
+    return (
+      <Field.Root name={name} id={name} error={field.error} hint={hint} required={required}>
+        <Field.Label action={labelAction}>{label}</Field.Label>
+        <Field.Hint />
+        {fields.map((field, index) => (
+          <Flex key={index} paddingTop={1} paddingBottom={2} justifyContent="space-between">
+            <Box style={{ marginRight: '8px', flexGrow: 1 }}>
+              <Field.Input
+                type="text"
+                size="S"
+                value={field}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleFieldChange(index, e.target.value)}
+              />
+            </Box>
+            <Button variant="danger-light" onClick={() => removeField(index)}>
+              <Trash />
             </Button>
           </Flex>
-          {error && <Field.Error>{error}</Field.Error>}
-          {description && <Field.Hint>{description.defaultMessage}</Field.Hint>}
+        ))}
+        <Flex paddingTop={1} paddingBottom={2} justifyContent="space-between">
+          <Box style={{ marginRight: '8px', flexGrow: 1 }}>
+            <Field.Input
+              type="text"
+              size="S"
+              placeholder="New Field"
+              value={newField}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewField(e.target.value)}
+            />
+          </Box>
+          <Button variant="secondary" disabled={!newField} onClick={addField}>
+            Add Field
+          </Button>
         </Flex>
+        <Field.Hint />
+        <Field.Error />
       </Field.Root>
-  );
-});
+    );
+  }
+);
