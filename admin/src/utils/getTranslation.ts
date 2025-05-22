@@ -1,5 +1,3 @@
 import { PLUGIN_ID } from '../pluginId';
 
-const getTranslation = (id: string) => `${PLUGIN_ID}.${id}`;
-
-export { getTranslation };
+export const getTrad = (id: string): string => `${PLUGIN_ID}.${id}`;

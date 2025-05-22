@@ -1,1 +1,6 @@
-{}
+{
+  "string-array-field.label": "String Array Field",
+  "string-array-field.description": "Escribe varios textos en formato array",
+  "string-array-field.options.advanced.requiredField": "Campo requerido",
+  "string-array-field.options.advanced.requiredFieldDescription": "Este campo es obligatorio"
+}
